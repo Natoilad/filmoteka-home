@@ -5195,6 +5195,7 @@ const paginationBoxElem = document.querySelector(".js-pagination");
 const form = document.querySelector(".form-js");
 const inputEl = document.querySelector(".form-input");
 const notif = document.querySelector(".form__notification");
+// import { searchLangGlobal } from './lang-switch';
 let globalRequest;
 let currPageGlobe = 1;
 let page = 1;
@@ -5243,6 +5244,7 @@ async function getMovies(page1 = 1) {
     }
 }
 getMovies().then((data)=>{
+    let searchLangGlobal;
     if (langControlElem.classList.contains("checked")) {
         (0, _localJs.logo).textContent = "\u0424\u0456\u043B\u044C\u043C\u043E\u0442\u0435\u043A\u0430";
         (0, _localJs.library).textContent = "\u041C\u041E\u042F \u0411\u0406\u0411\u041B\u0406\u041E\u0422\u0415\u041A\u0410";

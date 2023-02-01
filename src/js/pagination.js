@@ -12,6 +12,7 @@ export const paginationBoxElem = document.querySelector('.js-pagination');
 const form = document.querySelector('.form-js');
 const inputEl = document.querySelector('.form-input');
 const notif = document.querySelector('.form__notification');
+// import { searchLangGlobal } from './lang-switch';
 let globalRequest;
 let currPageGlobe = 1;
 let page = 1;
@@ -67,6 +68,7 @@ async function getMovies(page = 1) {
   }
 }
 getMovies().then(data => {
+  let searchLangGlobal;
   if (langControlElem.classList.contains('checked')) {
     logo.textContent = 'Фільмотека';
     library.textContent = 'МОЯ БІБЛІОТЕКА';
