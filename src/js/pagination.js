@@ -12,7 +12,6 @@ export const paginationBoxElem = document.querySelector('.js-pagination');
 const form = document.querySelector('.form-js');
 const inputEl = document.querySelector('.form-input');
 const notif = document.querySelector('.form__notification');
-// import { searchLangGlobal } from './lang-switch';
 let searchLangGlobal;
 let globalRequest;
 let currPageGlobe = 1;
@@ -23,7 +22,6 @@ async function inputRequest(e) {
   e.preventDefault();
   let request = inputEl.value.trim();
   lang = localStorage.getItem(LANG);
-  // lang = "en-US";
   if (!request) {
     return;
   }
