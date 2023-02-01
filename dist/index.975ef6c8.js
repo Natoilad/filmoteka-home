@@ -5196,6 +5196,7 @@ const form = document.querySelector(".form-js");
 const inputEl = document.querySelector(".form-input");
 const notif = document.querySelector(".form__notification");
 // import { searchLangGlobal } from './lang-switch';
+let searchLangGlobal;
 let globalRequest;
 let currPageGlobe = 1;
 let page = 1;
@@ -5244,17 +5245,17 @@ async function getMovies(page1 = 1) {
     }
 }
 getMovies().then((data)=>{
-    let searchLangGlobal;
+    let searchLangGlobal1;
     if (langControlElem.classList.contains("checked")) {
         (0, _localJs.logo).textContent = "\u0424\u0456\u043B\u044C\u043C\u043E\u0442\u0435\u043A\u0430";
         (0, _localJs.library).textContent = "\u041C\u041E\u042F \u0411\u0406\u0411\u041B\u0406\u041E\u0422\u0415\u041A\u0410";
         (0, _localJs.home).textContent = "\u0413\u041E\u041B\u041E\u0412\u041D\u0410";
-        searchLangGlobal = "en";
+        searchLangGlobal1 = "en";
     } else {
         (0, _localJs.logo).textContent = "Filmoteka";
         (0, _localJs.library).textContent = "MY LIBRARY";
         (0, _localJs.home).textContent = "HOME";
-        searchLangGlobal = "uk";
+        searchLangGlobal1 = "uk";
     }
     (0, _loader.loaderOn)();
     (0, _renderJs.render)(data);
