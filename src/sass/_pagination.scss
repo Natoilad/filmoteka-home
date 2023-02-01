@@ -1,0 +1,72 @@
+.js-pagination,
+.js-pagination-lib {
+  display: flex;
+  margin-top: 60px;
+  margin-bottom: 60px;
+
+  justify-content: center;
+  gap: 10px;
+
+  height: 40px;
+
+  @media (max-width: 767px) {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}
+
+.js-pagination li,
+.js-pagination-lib li {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  font-size: 12px;
+  font-weight: 500;
+  color: #000000;
+  cursor: pointer;
+
+  border-radius: 5px;
+}
+.js-pagination li:hover,
+.js-pagination li:focus,
+.js-pagination-lib li:hover,
+.js-pagination-lib li:focus {
+  background-color: #ff6b08;
+}
+.js-pagination li.dark:hover,
+.js-pagination li.dark:focus,
+.js-pagination-lib li.dark:hover,
+.js-pagination-lib li.dark:focus {
+  background-color: #ff6b08;
+}
+.js-pagination li.dark,
+.js-pagination-lib li.dark {
+  background-color: #ffffff;
+}
+
+.js-pagination li.active,
+.js-pagination-lib li.active {
+  background-color: #ff6b08;
+  color: #ffffff;
+}
+
+.js-pagination li.arrows,
+.js-pagination-lib.arrows {
+  background-color: #f7f7f7;
+}
+
+@media (max-width: 767px) {
+  .js-pagination li.dots,
+  .js-pagination-lib.dots,
+  .js-pagination li.firstInt,
+  .js-pagination-lib.firstInt,
+  .js-pagination li.lastInt,
+  .js-pagination-lib.lastInt {
+    display: none;
+  }
+}

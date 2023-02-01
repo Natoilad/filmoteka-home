@@ -1,0 +1,35 @@
+{
+  "name": "parcel-project-template",
+  "version": "2.0.0",
+  "description": "",
+  "homepage": "https://Natoilad.github.io/filmoteka-home",
+  "scripts": {
+    "start": "parcel src/*.html --open",
+    "build": "parcel build src/*.html --public-url /filmoteka-home/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Natoilad/filmoteka-home.git"
+  },
+  "keywords": [],
+  "author": "Natoilad Serhii <q0979318881@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Natoilad/filmoteka-home/issues"
+  },
+  "dependencies": {
+    "axios": "^1.2.4",
+    "modern-normalize": "^1.1.0",
+    "notiflix": "^3.2.6"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "^2.6.0",
+    "@parcel/transformer-sass": "^2.6.0",
+    "@parcel/transformer-webmanifest": "^2.6.0",
+    "buffer": "^6.0.3",
+    "parcel": "^2.6.0",
+    "parcel-reporter-clean-dist": "^1.0.4",
+    "posthtml-include": "^1.7.4"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead"
+}
