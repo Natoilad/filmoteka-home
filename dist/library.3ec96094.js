@@ -506,8 +506,10 @@ function hmrAcceptRun(bundle, id) {
 var _libaryLocal = require("./js/libaryLocal");
 var _watched = require("./js/watched");
 var _queue = require("./js/queue");
+var _themeChangeLib = require("./js/theme-change-lib");
+var _btnUp = require("./js/btn-up");
 
-},{"./js/libaryLocal":"hyB1H","./js/watched":"gX8xR","./js/queue":"dGrI7"}],"hyB1H":[function(require,module,exports) {
+},{"./js/libaryLocal":"hyB1H","./js/watched":"gX8xR","./js/queue":"dGrI7","./js/theme-change-lib":"f1i01","./js/btn-up":"iwZ7p"}],"hyB1H":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "checkDataRenderPage", ()=>checkDataRenderPage);
@@ -684,15 +686,15 @@ class LocalPagination {
     constructor(category){
         this.arr = category;
         this.pageNum = 1;
-        this.pageAll = Math.round((this.arr.length - 1) / 5);
-        this.pageSize = 5;
+        this.pageAll = Math.round((this.arr.length - 1) / 9);
+        this.pageSize = 9;
         this.pagedArr;
     }
     paginate(arr, pageNumber, pageSize) {
         return arr.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
     }
     paginationRender() {
-        if (this.arr.length < 5) (0, _local.card).innerHTML = (0, _libaryLocal.checkDataRenderPage)(this.arr);
+        if (this.arr.length < 9) (0, _local.card).innerHTML = (0, _libaryLocal.checkDataRenderPage)(this.arr);
         else {
             this.pagedArr = this.paginate(this.arr, this.pageNum, this.pageSize);
             (0, _local.card).innerHTML = (0, _libaryLocal.checkDataRenderPage)(this.pagedArr);
@@ -749,17 +751,22 @@ parcelHelpers.export(exports, "showMovieMain", ()=>showMovieMain);
 parcelHelpers.export(exports, "showMovieLibrary", ()=>showMovieLibrary);
 var _localJs = require("./local.js");
 var _getGenres = require("./get-genres");
+var _createMovieCard = require("./createMovieCard");
+var _local = require("./local");
 var _trailer = require("./trailer");
 const backdrop = document.querySelector(".backdrop");
 const modalMovie = document.querySelector(".modal__movie");
 const watchedBtn = document.querySelector(".watched-btn-js");
+const libraryHeaderLink = document.querySelector(".js-library");
+const libraryMainContainer = document.querySelector("#main");
+const libraryHeader = document.querySelector(".library-header");
+const librarySlider = document.querySelector("#slider");
 async function showMovieMain(e) {
     const film = getFilmMain(e, ".card__item", (0, _localJs.CURRENT_MOVIES));
     const checkWatched = checkLibrary((0, _localJs.watche), film);
     const checkQueue = checkLibrary((0, _localJs.queue), film);
     const trailerLink = await (0, _trailer.trailerInst)(film.id);
     createMovieInfo(film, (0, _getGenres.GENRES_MOVIES), checkWatched, checkQueue, trailerLink);
-    eventListeners(closeModal, addFilm);
     backdrop.hidden = false;
 }
 async function showMovieLibrary(e) {
@@ -768,7 +775,6 @@ async function showMovieLibrary(e) {
     const checkQueue = checkLibrary((0, _localJs.queue), film);
     const trailerLink = await (0, _trailer.trailerInst)(film.id);
     createMovieInfo(film, (0, _getGenres.GENRES_MOVIES), checkWatched, checkQueue, trailerLink);
-    eventListeners(closeModal, addFilm);
     backdrop.hidden = false;
 }
 function getFilmMain(e, element, fromStoarage) {
@@ -826,6 +832,7 @@ function createMovieInfo(movie, genresList, checkWatched, checkQueue, trailer = 
   `;
     modalMovie.id = movie.id;
     modalMovie.innerHTML = modalMovieMarkup;
+    eventListeners(closeModal, addFilm);
 }
 // функції для закриття модального вікна
 const closeModal = {
@@ -860,6 +867,7 @@ function addToWatchedOrQueue(e, element, fromStoarage, local, key, btn) {
     local.push(film);
     localStorage.setItem(key, JSON.stringify(local));
     e.currentTarget.textContent = `remove from ${btn}`;
+    if (libraryHeaderLink.classList.contains("current")) (0, _local.card).innerHTML = reRenderLibrary(JSON.parse(localStorage.getItem(watchedOrQueue())));
 }
 function removeFromWatchedOrQueue(e, element, local, key, btn) {
     const films = JSON.parse(localStorage.getItem(key));
@@ -869,6 +877,7 @@ function removeFromWatchedOrQueue(e, element, local, key, btn) {
     });
     localStorage.setItem(key, JSON.stringify(local));
     e.currentTarget.textContent = `add to ${btn}`;
+    if (libraryHeaderLink.classList.contains("current")) (0, _local.card).innerHTML = reRenderLibrary(JSON.parse(localStorage.getItem(watchedOrQueue())));
 }
 // додає та видаляє слухачі подій
 function eventListeners(closeModal1, addFilm1) {
@@ -897,8 +906,22 @@ function watchedOrQueue() {
     if (watchedBtn.classList.contains("active")) return 0, _localJs.WATCHE;
     else return 0, _localJs.QUEUE;
 }
+function reRenderLibrary(filmsFromStorage) {
+    if (!filmsFromStorage || !filmsFromStorage.length) {
+        libraryMainContainer.classList.add("notification-bcg");
+        libraryHeader.classList.add("library-header-notification");
+        librarySlider.classList.add("slider-bcg");
+        return `<p class="notification-desc">
+            Nothing here yet, go back and select a movie.
+            </p>`;
+    }
+    libraryHeader.classList.remove("library-header-notification");
+    libraryMainContainer.classList.remove("notification-bcg");
+    librarySlider.classList.remove("slider-bcg");
+    return (0, _createMovieCard.createMovieCard)(filmsFromStorage);
+}
 
-},{"./local.js":"fHpqR","./get-genres":"bbJ9W","./trailer":"boCse","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"boCse":[function(require,module,exports) {
+},{"./local.js":"fHpqR","./get-genres":"bbJ9W","./trailer":"boCse","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./createMovieCard":"8zLyu","./local":"fHpqR"}],"boCse":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "trailerInst", ()=>trailerInst);
@@ -940,6 +963,90 @@ function onClickQueueBtn() {
 function onActiveQueueBtn() {
     queueBtn.classList.add("active");
     watchedBtn.classList.remove("active");
+}
+
+},{}],"f1i01":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "controlElem", ()=>controlElem);
+var _localJs = require("./local.js");
+var _loader = require("./loader");
+const controlElem = document.querySelector(".theme__control-lib");
+const toolbarElem = document.querySelector(".toolbar-lib");
+const footer = document.querySelector(".footer");
+const light = "light-theme";
+const dark = "dark-theme";
+let currentTheme = localStorage.getItem((0, _localJs.THEME));
+storageTheme();
+toolbarElem.addEventListener("click", onThemeChange);
+function onThemeChange(evt) {
+    (0, _loader.loaderOn)();
+    location.reload();
+    if (evt.target.classList.contains("theme__control-lib")) controlElem.classList.toggle("checked");
+    if (controlElem.classList.contains("checked")) {
+        footer.classList.remove("light-theme");
+        footer.classList.add("dark-theme");
+        document.body.classList.remove("light-theme");
+        document.body.classList.add("dark-theme");
+        localStorage.setItem((0, _localJs.THEME), dark);
+    } else {
+        footer.classList.remove("dark-theme");
+        footer.classList.add("light-theme");
+        document.body.classList.remove("dark-theme");
+        document.body.classList.add("light-theme");
+        localStorage.setItem((0, _localJs.THEME), light);
+    }
+    window.onload = (0, _loader.loaderOff)();
+}
+function storageTheme() {
+    if (currentTheme === null) return;
+    if (currentTheme === light) {
+        footer.classList.remove("dark-theme");
+        footer.classList.add("light-theme");
+        document.body.classList.remove("dark-theme");
+        document.body.classList.add("light-theme");
+        controlElem.classList.remove("checked");
+    } else {
+        footer.classList.remove("light-theme");
+        footer.classList.add("dark-theme");
+        document.body.classList.remove("light-theme");
+        document.body.classList.remove("light-theme");
+        document.body.classList.add("dark-theme");
+        controlElem.classList.add("checked");
+    }
+}
+
+},{"./local.js":"fHpqR","./loader":"aAovl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aAovl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "preloader", ()=>preloader);
+parcelHelpers.export(exports, "loaderOn", ()=>loaderOn);
+parcelHelpers.export(exports, "loaderOff", ()=>loaderOff);
+let preloader = document.querySelector(".preloader");
+function loaderOn() {
+    preloader.style.display = "flex";
+}
+function loaderOff() {
+    setTimeout(()=>{
+        preloader.style.display = "none";
+    }, 500);
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iwZ7p":[function(require,module,exports) {
+const btnUpElem = document.querySelector(".btn-up");
+btnUpElem.addEventListener("click", scrollToTop);
+window.addEventListener("scroll", listenScroll);
+function listenScroll() {
+    let scrolled = window.scrollY;
+    let userHeight = document.documentElement.clientHeight;
+    scrolled < userHeight ? btnUpElem.classList.add("show") : btnUpElem.classList.remove("show");
+}
+function scrollToTop() {
+    let scrollStep = window.scrollY / 20;
+    if (window.scrollY > 0) {
+        window.scrollBy(0, -scrollStep);
+        setTimeout(scrollToTop, 0);
+    }
 }
 
 },{}]},["bflWm","hjkgY"], "hjkgY", "parcelRequired7c6")

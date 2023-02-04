@@ -184,6 +184,7 @@ img {
 
 .library-header {
   background-image: linear-gradient(#0000008f, #0000008f), url("header-2-mobile.d0858633.jpg");
+  position: relative;
 }
 
 .home-header__container {
@@ -336,6 +337,10 @@ img {
     display: inline-block;
   }
 
+  .page-header__logo-title:hover, .page-header__logo-title:focus {
+    color: #ff6b08;
+  }
+
   .form-input {
     width: 336px;
   }
@@ -382,6 +387,10 @@ img {
 .library-header-notification {
   background-color: #000;
   background-image: none;
+}
+
+.home:hover, .library:hover, .home:focus, .library:focus {
+  color: #ff6b08;
 }
 
 .card {
@@ -543,7 +552,8 @@ img {
   line-height: 1.14;
 }
 
-.js-modal__team {
+.js-team-modal__open {
+  cursor: pointer;
   text-decoration: underline;
 }
 
@@ -647,14 +657,14 @@ img {
 
 @media screen and (max-width: 1279px) {
   .slider__btn {
-    height: 198px;
+    height: 204px;
   }
 }
 
 .slider__icon {
   width: 80px;
   height: 80px;
-  background-color: #00000075;
+  background-color: #000;
   border: 2px solid #fff;
   border-radius: 40px;
   transition: all .3s ease-in-out;
@@ -1183,6 +1193,75 @@ img {
   }
 }
 
+.js-team__modal-backdrop {
+  width: 100%;
+  height: 100%;
+  background-color: #69686854;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.js-team-modal__close {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.modal-close-btn__icon {
+  fill: #000;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+}
+
+.js-team {
+  background-color: #fff;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.js-team__member {
+  height: 100px;
+  width: 100%;
+  background-color: #7fffd4;
+}
+
+@media screen and (min-width: 768px) {
+  .js-team {
+    width: 704px;
+  }
+
+  .js-team__member {
+    width: calc(50% - 5px);
+    background-color: #7fffd4;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .js-team {
+    width: 1280px;
+  }
+
+  .js-team__member {
+    width: calc(33.3333% - 6.66667px);
+    background-color: #7fffd4;
+  }
+}
+
 .toolbar {
   width: 70px;
   height: 36px;
@@ -1327,7 +1406,15 @@ body.dark-theme {
   padding: 1px;
   display: inline-flex;
   position: absolute;
-  bottom: 80px;
+  bottom: 20px;
+  right: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .lang {
+    bottom: 80px;
+    left: 0;
+  }
 }
 
 .lang__rect {

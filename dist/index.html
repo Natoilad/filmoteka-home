@@ -32,7 +32,7 @@
             <a class="page-nav__link home current" href="/index.html"></a>
           </li>
           <li class="page-nav__item">
-            <a class="page-nav__link library" href="/library.html">My library</a>
+            <a class="page-nav__link library js-library" href="/library.html">My library</a>
           </li>
         </ul>
       </nav>
@@ -105,11 +105,22 @@
       <svg class="footer-icon">
         <use href="/icons.adfc4680.svg#icon-Vector"></use>
       </svg>
-      <p class="footer__text js-modal__team">by GoIT Students</p>
+      <p class="footer__text js-team-modal__open">by GoIT Students</p>
     </div>
   </div>
 </footer>
 
+    <div class="js-team__modal-backdrop" hidden="">
+  <ul class="js-team list">
+    <li>
+      <!-- <img src="./images/Anastasiya.jpg" alt=""> -->
+    </li>
+  </ul>
+  <button type="button" class="js-team-modal__close">
+    <img src="/close-icon.c672f53a.png" alt="close icon" class="modal-close-btn__icon">
+  </button>
+</div>
+ 
     <div class="backdrop" hidden="">
   <div class="modal-window">
     <button class="modal-window__close-btn">

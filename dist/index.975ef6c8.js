@@ -508,11 +508,12 @@ var _getFilmsJs = require("./js/get-films.js");
 // import './js/searchRequest';
 var _pagination = require("./js/pagination");
 var _modalWindow = require("./js/modal-window");
+var _teamModalWindow = require("./js/team-modal-window");
 var _themeChange = require("./js/theme-change");
 var _btnUp = require("./js/btn-up");
 var _langSwitch = require("./js/lang-switch");
 
-},{"./js/get-genres":"bbJ9W","./js/get-films.js":"6qzlu","./js/pagination":"9j1Dd","./js/modal-window":"bg8pZ","./js/theme-change":"E7umM","./js/btn-up":"iwZ7p","./js/lang-switch":"kstyO"}],"bbJ9W":[function(require,module,exports) {
+},{"./js/get-genres":"bbJ9W","./js/get-films.js":"6qzlu","./js/pagination":"9j1Dd","./js/modal-window":"bg8pZ","./js/theme-change":"E7umM","./js/btn-up":"iwZ7p","./js/lang-switch":"kstyO","./js/team-modal-window":"jHLnO"}],"bbJ9W":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GENRES_MOVIES", ()=>GENRES_MOVIES);
@@ -4997,17 +4998,22 @@ parcelHelpers.export(exports, "showMovieMain", ()=>showMovieMain);
 parcelHelpers.export(exports, "showMovieLibrary", ()=>showMovieLibrary);
 var _localJs = require("./local.js");
 var _getGenres = require("./get-genres");
+var _createMovieCard = require("./createMovieCard");
+var _local = require("./local");
 var _trailer = require("./trailer");
 const backdrop = document.querySelector(".backdrop");
 const modalMovie = document.querySelector(".modal__movie");
 const watchedBtn = document.querySelector(".watched-btn-js");
+const libraryHeaderLink = document.querySelector(".js-library");
+const libraryMainContainer = document.querySelector("#main");
+const libraryHeader = document.querySelector(".library-header");
+const librarySlider = document.querySelector("#slider");
 async function showMovieMain(e) {
     const film = getFilmMain(e, ".card__item", (0, _localJs.CURRENT_MOVIES));
     const checkWatched = checkLibrary((0, _localJs.watche), film);
     const checkQueue = checkLibrary((0, _localJs.queue), film);
     const trailerLink = await (0, _trailer.trailerInst)(film.id);
     createMovieInfo(film, (0, _getGenres.GENRES_MOVIES), checkWatched, checkQueue, trailerLink);
-    eventListeners(closeModal, addFilm);
     backdrop.hidden = false;
 }
 async function showMovieLibrary(e) {
@@ -5016,7 +5022,6 @@ async function showMovieLibrary(e) {
     const checkQueue = checkLibrary((0, _localJs.queue), film);
     const trailerLink = await (0, _trailer.trailerInst)(film.id);
     createMovieInfo(film, (0, _getGenres.GENRES_MOVIES), checkWatched, checkQueue, trailerLink);
-    eventListeners(closeModal, addFilm);
     backdrop.hidden = false;
 }
 function getFilmMain(e, element, fromStoarage) {
@@ -5074,6 +5079,7 @@ function createMovieInfo(movie, genresList, checkWatched, checkQueue, trailer = 
   `;
     modalMovie.id = movie.id;
     modalMovie.innerHTML = modalMovieMarkup;
+    eventListeners(closeModal, addFilm);
 }
 // функції для закриття модального вікна
 const closeModal = {
@@ -5108,6 +5114,7 @@ function addToWatchedOrQueue(e, element, fromStoarage, local, key, btn) {
     local.push(film);
     localStorage.setItem(key, JSON.stringify(local));
     e.currentTarget.textContent = `remove from ${btn}`;
+    if (libraryHeaderLink.classList.contains("current")) (0, _local.card).innerHTML = reRenderLibrary(JSON.parse(localStorage.getItem(watchedOrQueue())));
 }
 function removeFromWatchedOrQueue(e, element, local, key, btn) {
     const films = JSON.parse(localStorage.getItem(key));
@@ -5117,6 +5124,7 @@ function removeFromWatchedOrQueue(e, element, local, key, btn) {
     });
     localStorage.setItem(key, JSON.stringify(local));
     e.currentTarget.textContent = `add to ${btn}`;
+    if (libraryHeaderLink.classList.contains("current")) (0, _local.card).innerHTML = reRenderLibrary(JSON.parse(localStorage.getItem(watchedOrQueue())));
 }
 // додає та видаляє слухачі подій
 function eventListeners(closeModal1, addFilm1) {
@@ -5145,8 +5153,22 @@ function watchedOrQueue() {
     if (watchedBtn.classList.contains("active")) return 0, _localJs.WATCHE;
     else return 0, _localJs.QUEUE;
 }
+function reRenderLibrary(filmsFromStorage) {
+    if (!filmsFromStorage || !filmsFromStorage.length) {
+        libraryMainContainer.classList.add("notification-bcg");
+        libraryHeader.classList.add("library-header-notification");
+        librarySlider.classList.add("slider-bcg");
+        return `<p class="notification-desc">
+            Nothing here yet, go back and select a movie.
+            </p>`;
+    }
+    libraryHeader.classList.remove("library-header-notification");
+    libraryMainContainer.classList.remove("notification-bcg");
+    librarySlider.classList.remove("slider-bcg");
+    return (0, _createMovieCard.createMovieCard)(filmsFromStorage);
+}
 
-},{"./local.js":"fHpqR","./get-genres":"bbJ9W","./trailer":"boCse","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"boCse":[function(require,module,exports) {
+},{"./local.js":"fHpqR","./get-genres":"bbJ9W","./trailer":"boCse","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./createMovieCard":"8zLyu","./local":"fHpqR"}],"boCse":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "trailerInst", ()=>trailerInst);
@@ -5195,7 +5217,6 @@ const paginationBoxElem = document.querySelector(".js-pagination");
 const form = document.querySelector(".form-js");
 const inputEl = document.querySelector(".form-input");
 const notif = document.querySelector(".form__notification");
-// import { searchLangGlobal } from './lang-switch';
 let searchLangGlobal;
 let globalRequest;
 let currPageGlobe = 1;
@@ -5205,7 +5226,6 @@ async function inputRequest(e) {
     e.preventDefault();
     let request = inputEl.value.trim();
     lang = localStorage.getItem((0, _localJs.LANG));
-    // lang = "en-US";
     if (!request) return;
     if (!lang) lang = "en-US";
     else lang = localStorage.getItem((0, _localJs.LANG));
@@ -5417,7 +5437,7 @@ function storageTheme() {
         document.body.classList.add("dark-theme");
         controlElem.classList.add("checked");
     }
-}
+} /// на сторінку Бібліотека
 
 },{"./local.js":"fHpqR","./loader":"aAovl","./lang-switch":"kstyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aAovl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -5438,13 +5458,13 @@ function loaderOff() {
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kstyO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "langControlElem", ()=>langControlElem);
 parcelHelpers.export(exports, "searchLangGlobal", ()=>searchLangGlobal);
 parcelHelpers.export(exports, "onLangChange", ()=>onLangChange);
 var _localJs = require("./local.js");
 const langControlElem = document.querySelector(".lang__control");
 const langSwithElem = document.querySelector(".lang");
 let searchLangGlobal;
+console.log(langControlElem);
 const ukranian = "uk-UA";
 const english = "en-US";
 let currentLang = localStorage.getItem((0, _localJs.LANG));
@@ -5494,6 +5514,117 @@ function scrollToTop() {
     }
 }
 
-},{}]},["1RB6v","8lqZg"], "8lqZg", "parcelRequired7c6")
+},{}],"jHLnO":[function(require,module,exports) {
+var _teamCards = require("./team-cards");
+const teamModWindOpen = document.querySelector(".js-team-modal__open");
+const teamModWindClose = document.querySelector(".js-team-modal__close");
+const teamModBackdrop = document.querySelector(".js-team__modal-backdrop");
+const team = document.querySelector(".js-team");
+teamModWindOpen.addEventListener("click", onModWindOpen);
+teamModWindClose.addEventListener("click", onModWindClose);
+document.addEventListener("keydown", onEsc);
+function onModWindOpen() {
+    teamModBackdrop.hidden = false;
+    console.log("click");
+}
+// ------ закриття модального вікна ------
+function onModWindClose() {
+    teamModBackdrop.hidden = true;
+    console.log("click");
+}
+function onEsc(e) {
+    if (e.code !== "Escape") return;
+    teamModBackdrop.hidden = true;
+    document.removeEventListener("keydown", this.onEsc);
+}
+// ------------- розмітка карток команди
+function teamCardMarkup({ picture , name , role , ghlink  }) {
+    const markup = `<li class="js-team__member">
+  <img src=${picture} alt="team members photo" crossorigin class="team-member__photo"><p class="taem-member__name>${name}</p>
+  <p class="team-member__rol">${role}</p>
+  <a href=${ghlink} class="team-member__github-link link">GitHub</a></li>`;
+    return markup;
+}
+const teamModWindMarkup = (0, _teamCards.teamCards).map((card)=>teamCardMarkup(card)).join("");
+try {
+    team.insertAdjacentHTML("afterbegin", teamModWindMarkup);
+} catch (error) {
+    console.log(error);
+}
+
+},{"./team-cards":"fbseY"}],"fbseY":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "teamCards", ()=>teamCards);
+const teamCards = [
+    {
+        picture: `./images/Anastasiya.jpg`,
+        name: "Ivan",
+        role: "Team lead",
+        ghlink: "https://github.com/IvanDemchyk"
+    },
+    {
+        picture: `./images/Anastasiya.jpg`,
+        name: "Artem",
+        role: "Scrum master",
+        ghlink: "https://github.com/skyartartem"
+    },
+    {
+        picture: `https://media.licdn.com/dms/image/D4E35AQE-WKf-xR5ZLA/profile-framedphoto-shrink_200_200/0/1671191831476?e=1675879200&v=beta&t=2CRO5Ohd-fctTJy5f_cPUkeLpkjN0d_auzAf0uHJgII`,
+        name: "Anastasia",
+        role: "senior developer",
+        ghlink: "https://github.com/AnastasiiaHudymenko"
+    },
+    {
+        picture: "./images/maryna_melnyk",
+        name: "Maryna",
+        role: "developer",
+        ghlink: "https://github.com/marinamelnik1105"
+    },
+    {
+        picture: "#",
+        name: "Sergii",
+        role: "developer",
+        ghlink: "https://github.com/Natoilad"
+    },
+    {
+        picture: "./images/Volodymyr.png",
+        name: "Volodymyr",
+        role: "developer",
+        ghlink: "https://github.com/Mar-Volo"
+    },
+    {
+        picture: "#",
+        name: "Oleksandr",
+        role: "developer",
+        ghlink: "https://github.com/alexxxusachev888"
+    },
+    {
+        picture: "#",
+        name: "Eugen",
+        role: "developer",
+        ghlink: "https://github.com/Eugene-Hlushak"
+    },
+    {
+        picture: "#",
+        name: "Vladyslav",
+        role: "developer",
+        ghlink: "https://github.com/VVladyslav"
+    },
+    {
+        picture: "#",
+        name: "Mihajlo",
+        role: "developer",
+        ghlink: "https://github.com/MihajloGerbach"
+    },
+    {
+        picture: "#",
+        name: "Vlad",
+        role: "developer",
+        ghlink: "https://github.com/0Integral"
+    }, 
+];
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["1RB6v","8lqZg"], "8lqZg", "parcelRequired7c6")
 
 //# sourceMappingURL=index.975ef6c8.js.map
